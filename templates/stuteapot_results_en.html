@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StuTeaPot - Your Learning Style Results</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/stuteapot_style.css') }}"
+    />
+    <script src="{{ url_for('static', filename='js/stuteapot_results_interact.js') }}"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="results-main-content-area">
+        <!-- Main Learning Style Result Section -->
+        <div class="result-section">
+          <h2 id="main-style-text">
+            {% if main_learning_style %} Your main learning style is
+            <strong>{{ main_learning_style }}</strong>
+            {% else %} No results available. Please complete the questionnaire
+            first. {% endif %}
+          </h2>
+        </div>
+
+        <!-- Detailed Scores Section -->
+        <div class="result-section">
+          <h3>Detailed Learning Style Scores</h3>
+
+          <div class="styles-grid">
+            {% if learning_scores %} {% set styles = [ ('Meaning-Oriented',
+            learning_scores.meaning, 'meaning'), ('Reproduction-Oriented',
+            learning_scores.reproduction, 'reproduction'),
+            ('Application-Oriented', learning_scores.application,
+            'application'), ('Undirected', learning_scores.undirected,
+            'undirected') ] %} {% set sorted_styles = styles|sort(attribute=1,
+            reverse=true) %} {% for style_name, score, key in sorted_styles %}
+            <div class="style-item {% if loop.first %}highest{% endif %}">
+              <div class="style-name">{{ style_name }} Learning Style</div>
+              <span class="style-score">{{ score }}%</span>
+              <div class="simple-score-bar">
+                <div
+                  class="simple-score-fill"
+                  style="width: {{ score }}%;"
+                ></div>
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <!-- Fallback if no scores available -->
+            <div class="style-item">
+              <div class="style-name">Meaning-Oriented Learning Style</div>
+              <span class="style-score">0%</span>
+              <div class="simple-score-bar">
+                <div class="simple-score-fill" style="width: 0%"></div>
+              </div>
+            </div>
+            <div class="style-item">
+              <div class="style-name">Reproduction-Oriented Learning Style</div>
+              <span class="style-score">0%</span>
+              <div class="simple-score-bar">
+                <div class="simple-score-fill" style="width: 0%"></div>
+              </div>
+            </div>
+            <div class="style-item">
+              <div class="style-name">Application-Oriented Learning Style</div>
+              <span class="style-score">0%</span>
+              <div class="simple-score-bar">
+                <div class="simple-score-fill" style="width: 0%"></div>
+              </div>
+            </div>
+            <div class="style-item">
+              <div class="style-name">Undirected Learning Style</div>
+              <span class="style-score">0%</span>
+              <div class="simple-score-bar">
+                <div class="simple-score-fill" style="width: 0%"></div>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Detailed Scores Section -->
+        <div class="result-section">
+          <div class="result-explanation-MO">
+            <h2>What is the meaning-oriented learning style?</h2>
+            <p>
+              According to Vermunt, when learning is oriented towards the
+              creation of meaning, knowledge is processed by relating the
+              details to the subject matter as a whole and structuring it. The
+              knowledge content is processed critically. It is often paired with
+              an awareness and a capacity of evaluating how you learn and what
+              you learn.
+            </p>
+            <p>
+              Learning is associated to the mental model of constructing
+              knowledge. Moreover, a meaning-oriented learning style is
+              motivated by personal interest in the subject matters.
+            </p>
+          </div>
+          <br />
+          <div class="result-explanation-RO">
+            <h2>What is the reproduction-oriented learning style?</h2>
+            <p>
+              The reproduction-oriented learning style favours an analytical,
+              organised approach to studying. Knowledge is processed by
+              memorising and rehearsing, and by analysing theories or problems
+              step by step.
+            </p>
+            <p>
+              Because learning is thought as an intake of knowledge, studying
+              means making sure the knowledge has been received. This often
+              leads to a need of external regulation, for instance verifying if
+              a concept is understood or if a set of items is memorized entirely
+              by completing a mock-exam or practicing on an exercise sheet.
+            </p>
+            <p>
+              Learning is motivated by either obtaining a certificate, a grade
+              or a degree (depending on the scale) or testing one-self, hence
+              thinking of academic pursuit as a challenge.
+            </p>
+          </div>
+          <br />
+          <div class="result-explanation-AO">
+            <h2>What is the application-oriented learning style?</h2>
+            <p>
+              The application-oriented learning style is maybe the most forward
+              one as it is characterised by a need for concretising knowledge
+              and sense the use one can make of it. Studying is learning how to
+              use knowledge, how to apply it to concrete situations.
+            </p>
+            <p>
+              It is often paired with a motivation that comes from something
+              concrete still – obtaining a certificate – or that comes from a
+              rather precise idea of why learning is needed which can be a
+              vocation for a future job.
+            </p>
+          </div>
+          <br />
+          <div class="result-explanation-U">
+            <h2>What is the undirected learning style?</h2>
+            <p>
+              When learning is undirected, the lack of a clear motivation makes
+              it difficult to be aware one’s own learning processes, goals and
+              overall relation to knowledge. There is often a lack of
+              regulation, that’s to say a lack of perspective and of concrete
+              actions to evaluate one’s knowledge and learning methods or
+              strategies
+            </p>
+            <p>
+              It is often associated with an ambivalent learning orientation,
+              and somehow a difficulty to understand the point of studies.
+              Learning may be thought simply as a stimulating activity. It may
+              also be viewed a as cooperation, but where others take the lead or
+              even that leads to nowhere precisely.
+            </p>
+          </div>
+        </div>
+
+        <!-- Navigation Section -->
+        <div class="result-section">
+          <div class="results-navigation">
+            <a href="{{ url_for('take_test_en') }}" class="test-button">
+              Back to Questionnaire
+            </a>
+            <a href="{{ url_for('home') }}" class="test-button">
+              Return to Home
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

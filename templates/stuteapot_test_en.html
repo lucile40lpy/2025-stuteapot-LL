@@ -1,0 +1,4808 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StuTeaPot/Test-en</title>
+    <script src="{{ url_for('static', filename='node_modules/d3/dist/d3.js') }}"></script>
+    <script
+      type="module"
+      src="{{ url_for('static', filename='js/stuteapot_test_interact.js') }}"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/stuteapot_style.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="pre-test-area">
+      <h2>StuTeaPot Questionnaire</h2>
+      <p>
+        Please answer with what you think is true, not what you think you should
+        answer.
+      </p>
+    </div>
+
+    <form method="POST" action="{{ url_for('submit_test') }}" id="test-form">
+      <div class="test-questions">
+        <div class="questions" id="questions_data">
+          <div class="question" id="anon_ID">
+            <h3>Do you have a personal anonymous ID?</h3>
+            <p>
+              If you have been given an anonymous ID, please enter it below. If
+              not, leave this field empty.
+            </p>
+            <div class="options">
+              <label class="option">
+                <input
+                  type="text"
+                  name="anonymous-id"
+                  placeholder="Enter your anonymous ID"
+                  onchange="validateAnonymousID()"
+                />
+              </label>
+            </div>
+            <p id="anonymous-id-error" style="color: red; display: none">
+              Please enter a valid ID (3-20 characters)
+            </p>
+          </div>
+        </div>
+
+        <div class="questions" id="questions-demograpy">
+          <h2>Demographic profile</h2>
+          <div class="question" id="gender">
+            <p>What is your gender?</p>
+            <div class="options">
+              <label class="option">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="female"
+                  onchange="validateGender()"
+                />
+                Female
+              </label>
+              <label class="option">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="male"
+                  onchange="validateGender()"
+                />
+                Male
+              </label>
+              <label class="option">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="other"
+                  onchange="validateGender()"
+                />
+                Other
+              </label>
+              <label class="option">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="prefer-not-to-say"
+                  onchange="validateGender()"
+                />
+                Prefer not to say
+              </label>
+            </div>
+            <p id="gender-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="age">
+            <p>How old are you?</p>
+            <p>Type a number or adjust by going up or down.</p>
+            <div class="options">
+              <label class="option">
+                <input
+                  type="number"
+                  name="age"
+                  min="1"
+                  max="120"
+                  placeholder="Enter your age"
+                  onchange="validateAge()"
+                />
+              </label>
+            </div>
+            <p id="age-error" style="color: red; display: none">
+              Please enter a valid age (1-120)
+            </p>
+          </div>
+
+          <div class="question" id="economic-situation">
+            <p>How would you describe your financial situation?</p>
+            <div class="options">
+              <label class="option">
+                <select name="economic-situation" onchange="validateEco()">
+                  <option value="">Select your situation</option>
+                  <option value="1">Very below average</option>
+                  <option value="2">Below average</option>
+                  <option value="3">Average</option>
+                  <option value="4">Over average</option>
+                  <option value="5">Very over average</option>
+                </select>
+              </label>
+            </div>
+            <p id="eco-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+        </div>
+
+        <div class="questions" id="questions-school">
+          <h2>Academic profile</h2>
+
+          <div class="question" id="class-year">
+            <h3>In what year are you?</h3>
+            <div class="options">
+              <label class="option">
+                <input
+                  type="radio"
+                  name="class-year"
+                  value="year1"
+                  onchange="validateClassYear()"
+                />
+                Year 1
+              </label>
+              <label class="option">
+                <input
+                  type="radio"
+                  name="class-year"
+                  value="year2"
+                  onchange="validateClassYear()"
+                />
+                Year 2
+              </label>
+              <label class="option">
+                <input
+                  type="radio"
+                  name="class-year"
+                  value="year3"
+                  onchange="validateClassYear()"
+                />
+                Year 3
+              </label>
+            </div>
+            <p id="class-year-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="study-field">
+            <h3>In what class are you?</h3>
+            <div class="options">
+              <label class="option">
+                <input
+                  type="radio"
+                  name="study-field"
+                  value="smd"
+                  onchange="validateStudyField()"
+                />
+                SMD
+              </label>
+              <label class="option">
+                <input
+                  type="radio"
+                  name="study-field"
+                  value="cpes-sciences"
+                  onchange="validateStudyField()"
+                />
+                CPES Sciences
+              </label>
+              <label class="option">
+                <input
+                  type="radio"
+                  name="study-field"
+                  value="cpes-esd"
+                  onchange="validateStudyField()"
+                />
+                CPES ESD
+              </label>
+              <label class="option">
+                <input
+                  type="radio"
+                  name="study-field"
+                  value="cpes-humanites"
+                  onchange="validateStudyField()"
+                />
+                CPES Humanités
+              </label>
+              <label class="option">
+                <input
+                  type="radio"
+                  name="study-field"
+                  value="cpes-dac"
+                  onchange="validateStudyField()"
+                />
+                CPES DAC
+              </label>
+              <label class="option">
+                <input
+                  type="radio"
+                  name="study-field"
+                  value="cppe"
+                  onchange="validateStudyField()"
+                />
+                CPPE
+              </label>
+            </div>
+            <p id="study-field-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="grades">
+            <h3>What was your grade average last year?</h3>
+            <p>Enter a number between 0 and 20</p>
+            <div class="options">
+              <label class="option">
+                <input
+                  type="number"
+                  name="grades"
+                  min="0"
+                  max="20"
+                  step="0.1"
+                  placeholder="Enter your grade average"
+                  onchange="validateGrades()"
+                />
+              </label>
+            </div>
+            <p id="grades-error" style="color: red; display: none">
+              Please enter a valid grade (0-20)
+            </p>
+          </div>
+
+          <!-- New section for statements -->
+          <div class="question" id="statements-section">
+            <h3>Indicate how those statements apply to you.</h3>
+
+            <div class="question" id="self-confidence">
+              <p>
+                <em
+                  >"I feel confident in my ability to understand course material
+                  and succeed in my academic pursuits."</em
+                >
+              </p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="self-confidence"
+                    value="1"
+                    onchange="validateSelfConfidence()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="self-confidence"
+                    value="2"
+                    onchange="validateSelfConfidence()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="self-confidence"
+                    value="3"
+                    onchange="validateSelfConfidence()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="self-confidence"
+                    value="4"
+                    onchange="validateSelfConfidence()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="self-confidence"
+                    value="5"
+                    onchange="validateSelfConfidence()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p id="self-confidence-error" style="color: red; display: none">
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question" id="stress">
+              <p>
+                <em
+                  >"I frequently experience stress or anxiety related to my
+                  academic workload and performance."</em
+                >
+              </p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="stress"
+                    value="1"
+                    onchange="validateStress()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="stress"
+                    value="2"
+                    onchange="validateStress()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="stress"
+                    value="3"
+                    onchange="validateStress()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="stress"
+                    value="4"
+                    onchange="validateStress()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="stress"
+                    value="5"
+                    onchange="validateStress()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p id="stress-error" style="color: red; display: none">
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question" id="well-being">
+              <p>
+                <em
+                  >"I feel satisfied and positive about my overall academic
+                  experience and environment."</em
+                >
+              </p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="well-being"
+                    value="1"
+                    onchange="validateWellBeing()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="well-being"
+                    value="2"
+                    onchange="validateWellBeing()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="well-being"
+                    value="3"
+                    onchange="validateWellBeing()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="well-being"
+                    value="4"
+                    onchange="validateWellBeing()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="well-being"
+                    value="5"
+                    onchange="validateWellBeing()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p id="well-being-error" style="color: red; display: none">
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question" id="knowledge-durability">
+              <p>
+                <em
+                  >"The knowledge I acquire in my studies feels lasting and will
+                  be useful beyond my immediate academic needs."</em
+                >
+              </p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="knowledge-durability"
+                    value="1"
+                    onchange="validateKnowledgeDurability()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="knowledge-durability"
+                    value="2"
+                    onchange="validateKnowledgeDurability()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="knowledge-durability"
+                    value="3"
+                    onchange="validateKnowledgeDurability()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="knowledge-durability"
+                    value="4"
+                    onchange="validateKnowledgeDurability()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="knowledge-durability"
+                    value="5"
+                    onchange="validateKnowledgeDurability()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="knowledge-durability-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question" id="cheating">
+              <p>
+                <em
+                  >"I have used or considered using unauthorized help (cheating)
+                  during exams or assignments."</em
+                >
+              </p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="cheating"
+                    value="1"
+                    onchange="validateCheating()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="cheating"
+                    value="2"
+                    onchange="validateCheating()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="cheating"
+                    value="3"
+                    onchange="validateCheating()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="cheating"
+                    value="4"
+                    onchange="validateCheating()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="cheating"
+                    value="5"
+                    onchange="validateCheating()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p id="cheating-error" style="color: red; display: none">
+                Please select an option
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FFM Section -->
+        <div class="questions" id="questions-FFM">
+          <h2>Big Five Inventory (BFI-10)</h2>
+          <div class="question" id="ffm-intro">
+            <p>
+              10 questions Big Five Inventory (BFI-10) as developed by
+              Rammstedt, B. & John, O.P. (2007)
+            </p>
+            <p>
+              <strong
+                >How well do the following statements describe your
+                personality?</strong
+              >
+            </p>
+            <p>I see myself as someone who...</p>
+          </div>
+
+          <div class="question" id="ffm1">
+            <p>...is reserved</p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm1"
+                  value="1"
+                  onchange="validateFFM1()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm1"
+                  value="2"
+                  onchange="validateFFM1()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm1"
+                  value="3"
+                  onchange="validateFFM1()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm1"
+                  value="4"
+                  onchange="validateFFM1()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm1"
+                  value="5"
+                  onchange="validateFFM1()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ffm1-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ffm2">
+            <p>...is generally trusting</p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm2"
+                  value="1"
+                  onchange="validateFFM2()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm2"
+                  value="2"
+                  onchange="validateFFM2()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm2"
+                  value="3"
+                  onchange="validateFFM2()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm2"
+                  value="4"
+                  onchange="validateFFM2()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm2"
+                  value="5"
+                  onchange="validateFFM2()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ffm2-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ffm3">
+            <p>...tends to be lazy</p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm3"
+                  value="1"
+                  onchange="validateFFM3()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm3"
+                  value="2"
+                  onchange="validateFFM3()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm3"
+                  value="3"
+                  onchange="validateFFM3()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm3"
+                  value="4"
+                  onchange="validateFFM3()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm3"
+                  value="5"
+                  onchange="validateFFM3()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ffm3-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ffm4">
+            <p>...is relaxed, handles stress well</p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm4"
+                  value="1"
+                  onchange="validateFFM4()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm4"
+                  value="2"
+                  onchange="validateFFM4()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm4"
+                  value="3"
+                  onchange="validateFFM4()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm4"
+                  value="4"
+                  onchange="validateFFM4()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm4"
+                  value="5"
+                  onchange="validateFFM4()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ffm4-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ffm5">
+            <p>...has few artistic interests</p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm5"
+                  value="1"
+                  onchange="validateFFM5()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm5"
+                  value="2"
+                  onchange="validateFFM5()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm5"
+                  value="3"
+                  onchange="validateFFM5()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm5"
+                  value="4"
+                  onchange="validateFFM5()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm5"
+                  value="5"
+                  onchange="validateFFM5()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ffm5-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ffm6">
+            <p>...is outgoing, sociable</p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm6"
+                  value="1"
+                  onchange="validateFFM6()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm6"
+                  value="2"
+                  onchange="validateFFM6()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm6"
+                  value="3"
+                  onchange="validateFFM6()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm6"
+                  value="4"
+                  onchange="validateFFM6()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm6"
+                  value="5"
+                  onchange="validateFFM6()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ffm6-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ffm7">
+            <p>...tends to find fault with others</p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm7"
+                  value="1"
+                  onchange="validateFFM7()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm7"
+                  value="2"
+                  onchange="validateFFM7()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm7"
+                  value="3"
+                  onchange="validateFFM7()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm7"
+                  value="4"
+                  onchange="validateFFM7()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm7"
+                  value="5"
+                  onchange="validateFFM7()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ffm7-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ffm8">
+            <p>...does a thorough job</p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm8"
+                  value="1"
+                  onchange="validateFFM8()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm8"
+                  value="2"
+                  onchange="validateFFM8()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm8"
+                  value="3"
+                  onchange="validateFFM8()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm8"
+                  value="4"
+                  onchange="validateFFM8()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm8"
+                  value="5"
+                  onchange="validateFFM8()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ffm8-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ffm9">
+            <p>...gets nervous easily</p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm9"
+                  value="1"
+                  onchange="validateFFM9()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm9"
+                  value="2"
+                  onchange="validateFFM9()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm9"
+                  value="3"
+                  onchange="validateFFM9()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm9"
+                  value="4"
+                  onchange="validateFFM9()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm9"
+                  value="5"
+                  onchange="validateFFM9()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ffm9-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ffm10">
+            <p>...has an active imagination</p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm10"
+                  value="1"
+                  onchange="validateFFM10()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm10"
+                  value="2"
+                  onchange="validateFFM10()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm10"
+                  value="3"
+                  onchange="validateFFM10()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm10"
+                  value="4"
+                  onchange="validateFFM10()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ffm10"
+                  value="5"
+                  onchange="validateFFM10()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ffm10-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+        </div>
+
+        <!-- ILS Section -->
+        <div class="questions" id="questions-ILS">
+          <h2>Inventory of Learning Styles (ILS)</h2>
+
+          <!-- ILS Activities Section -->
+          <div class="question" id="ils-activities-intro">
+            <h3>Study Activities</h3>
+            <p>
+              This part of the inventory is concerned with the activities
+              students undertake in the context of their studies. Read each
+              statement and then indicate to what extent you yourself engage in
+              the activity concerned while studying.
+            </p>
+          </div>
+
+          <div class="question" id="ils-act1">
+            <p>
+              I try to combine the subjects that are dealt with separately in a
+              course into one whole.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act1"
+                  value="1"
+                  onchange="validateILSAct1()"
+                />
+                <span class="likert-label">I do this seldom or never</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act1"
+                  value="2"
+                  onchange="validateILSAct1()"
+                />
+                <span class="likert-label">I do this sometimes</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act1"
+                  value="3"
+                  onchange="validateILSAct1()"
+                />
+                <span class="likert-label">I do this regularly</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act1"
+                  value="4"
+                  onchange="validateILSAct1()"
+                />
+                <span class="likert-label">I do this often</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act1"
+                  value="5"
+                  onchange="validateILSAct1()"
+                />
+                <span class="likert-label">I do this almost always</span>
+              </div>
+            </div>
+            <p id="ils-act1-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-act2">
+            <p>
+              I compare my view of a course topic with the views of the authors
+              of the textbook used in that course.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act2"
+                  value="1"
+                  onchange="validateILSAct2()"
+                />
+                <span class="likert-label">I do this seldom or never</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act2"
+                  value="2"
+                  onchange="validateILSAct2()"
+                />
+                <span class="likert-label">I do this sometimes</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act2"
+                  value="3"
+                  onchange="validateILSAct2()"
+                />
+                <span class="likert-label">I do this regularly</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act2"
+                  value="4"
+                  onchange="validateILSAct2()"
+                />
+                <span class="likert-label">I do this often</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act2"
+                  value="5"
+                  onchange="validateILSAct2()"
+                />
+                <span class="likert-label">I do this almost always</span>
+              </div>
+            </div>
+            <p id="ils-act2-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-act3">
+            <p>I memorize lists of characteristics of a certain phenomenon.</p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act3"
+                  value="1"
+                  onchange="validateILSAct3()"
+                />
+                <span class="likert-label">I do this seldom or never</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act3"
+                  value="2"
+                  onchange="validateILSAct3()"
+                />
+                <span class="likert-label">I do this sometimes</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act3"
+                  value="3"
+                  onchange="validateILSAct3()"
+                />
+                <span class="likert-label">I do this regularly</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act3"
+                  value="4"
+                  onchange="validateILSAct3()"
+                />
+                <span class="likert-label">I do this often</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act3"
+                  value="5"
+                  onchange="validateILSAct3()"
+                />
+                <span class="likert-label">I do this almost always</span>
+              </div>
+            </div>
+            <p id="ils-act3-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-act4">
+            <p>I analyse the separate components of a theory step by step.</p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act4"
+                  value="1"
+                  onchange="validateILSAct4()"
+                />
+                <span class="likert-label">I do this seldom or never</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act4"
+                  value="2"
+                  onchange="validateILSAct4()"
+                />
+                <span class="likert-label">I do this sometimes</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act4"
+                  value="3"
+                  onchange="validateILSAct4()"
+                />
+                <span class="likert-label">I do this regularly</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act4"
+                  value="4"
+                  onchange="validateILSAct4()"
+                />
+                <span class="likert-label">I do this often</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act4"
+                  value="5"
+                  onchange="validateILSAct4()"
+                />
+                <span class="likert-label">I do this almost always</span>
+              </div>
+            </div>
+            <p id="ils-act4-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-act5">
+            <p>
+              I pay particular attention to those parts of a course that have
+              practical utility.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act5"
+                  value="1"
+                  onchange="validateILSAct5()"
+                />
+                <span class="likert-label">I do this seldom or never</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act5"
+                  value="2"
+                  onchange="validateILSAct5()"
+                />
+                <span class="likert-label">I do this sometimes</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act5"
+                  value="3"
+                  onchange="validateILSAct5()"
+                />
+                <span class="likert-label">I do this regularly</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act5"
+                  value="4"
+                  onchange="validateILSAct5()"
+                />
+                <span class="likert-label">I do this often</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act5"
+                  value="5"
+                  onchange="validateILSAct5()"
+                />
+                <span class="likert-label">I do this almost always</span>
+              </div>
+            </div>
+            <p id="ils-act5-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-act6">
+            <p>
+              To test my learning progress, I try to answer questions about the
+              subject matter which I make up myself.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act6"
+                  value="1"
+                  onchange="validateILSAct6()"
+                />
+                <span class="likert-label">I do this seldom or never</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act6"
+                  value="2"
+                  onchange="validateILSAct6()"
+                />
+                <span class="likert-label">I do this sometimes</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act6"
+                  value="3"
+                  onchange="validateILSAct6()"
+                />
+                <span class="likert-label">I do this regularly</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act6"
+                  value="4"
+                  onchange="validateILSAct6()"
+                />
+                <span class="likert-label">I do this often</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act6"
+                  value="5"
+                  onchange="validateILSAct6()"
+                />
+                <span class="likert-label">I do this almost always</span>
+              </div>
+            </div>
+            <p id="ils-act6-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-act7">
+            <p>
+              In addition to the syllabus, I study other literature related to
+              the content of the course.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act7"
+                  value="1"
+                  onchange="validateILSAct7()"
+                />
+                <span class="likert-label">I do this seldom or never</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act7"
+                  value="2"
+                  onchange="validateILSAct7()"
+                />
+                <span class="likert-label">I do this sometimes</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act7"
+                  value="3"
+                  onchange="validateILSAct7()"
+                />
+                <span class="likert-label">I do this regularly</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act7"
+                  value="4"
+                  onchange="validateILSAct7()"
+                />
+                <span class="likert-label">I do this often</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act7"
+                  value="5"
+                  onchange="validateILSAct7()"
+                />
+                <span class="likert-label">I do this almost always</span>
+              </div>
+            </div>
+            <p id="ils-act7-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-act8">
+            <p>
+              I study according to the instructions given in the study materials
+              or provided by the teacher.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act8"
+                  value="1"
+                  onchange="validateILSAct8()"
+                />
+                <span class="likert-label">I do this seldom or never</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act8"
+                  value="2"
+                  onchange="validateILSAct8()"
+                />
+                <span class="likert-label">I do this sometimes</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act8"
+                  value="3"
+                  onchange="validateILSAct8()"
+                />
+                <span class="likert-label">I do this regularly</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act8"
+                  value="4"
+                  onchange="validateILSAct8()"
+                />
+                <span class="likert-label">I do this often</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act8"
+                  value="5"
+                  onchange="validateILSAct8()"
+                />
+                <span class="likert-label">I do this almost always</span>
+              </div>
+            </div>
+            <p id="ils-act8-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-act9">
+            <p>
+              I notice that it is difficult for me to determine whether I have
+              mastered the subject matter sufficiently.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act9"
+                  value="1"
+                  onchange="validateILSAct9()"
+                />
+                <span class="likert-label">I do this seldom or never</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act9"
+                  value="2"
+                  onchange="validateILSAct9()"
+                />
+                <span class="likert-label">I do this sometimes</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act9"
+                  value="3"
+                  onchange="validateILSAct9()"
+                />
+                <span class="likert-label">I do this regularly</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act9"
+                  value="4"
+                  onchange="validateILSAct9()"
+                />
+                <span class="likert-label">I do this often</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act9"
+                  value="5"
+                  onchange="validateILSAct9()"
+                />
+                <span class="likert-label">I do this almost always</span>
+              </div>
+            </div>
+            <p id="ils-act9-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-act10">
+            <p>
+              I test my learning progress solely by completing the questions,
+              tasks and exercises provided by the teacher or the textbook.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act10"
+                  value="1"
+                  onchange="validateILSAct10()"
+                />
+                <span class="likert-label">I do this seldom or never</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act10"
+                  value="2"
+                  onchange="validateILSAct10()"
+                />
+                <span class="likert-label">I do this sometimes</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act10"
+                  value="3"
+                  onchange="validateILSAct10()"
+                />
+                <span class="likert-label">I do this regularly</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act10"
+                  value="4"
+                  onchange="validateILSAct10()"
+                />
+                <span class="likert-label">I do this often</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-act10"
+                  value="5"
+                  onchange="validateILSAct10()"
+                />
+                <span class="likert-label">I do this almost always</span>
+              </div>
+            </div>
+            <p id="ils-act10-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <!-- ILS Motives Section -->
+          <div class="question" id="ils-motives-intro">
+            <h3>Study Motives and Objectives</h3>
+            <p>
+              This part of the ILS is concerned with the motives, objectives and
+              attitudes students may have with regard to their studies. Indicate
+              for each statement to what extent it applies to you.
+            </p>
+          </div>
+
+          <div class="question" id="ils-mot1">
+            <p>
+              If I have difficulty understanding a particular topic, I should
+              consult other books of my own accord.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot1"
+                  value="1"
+                  onchange="validateILSMot1()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot1"
+                  value="2"
+                  onchange="validateILSMot1()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot1"
+                  value="3"
+                  onchange="validateILSMot1()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot1"
+                  value="4"
+                  onchange="validateILSMot1()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot1"
+                  value="5"
+                  onchange="validateILSMot1()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ils-mot1-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-mot2">
+            <p>
+              To me, learning means: trying to remember the subject matter I am
+              given.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot2"
+                  value="1"
+                  onchange="validateILSMot2()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot2"
+                  value="2"
+                  onchange="validateILSMot2()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot2"
+                  value="3"
+                  onchange="validateILSMot2()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot2"
+                  value="4"
+                  onchange="validateILSMot2()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot2"
+                  value="5"
+                  onchange="validateILSMot2()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ils-mot2-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-mot3">
+            <p>
+              The things I learn have to be useful for solving practical
+              problems.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot3"
+                  value="1"
+                  onchange="validateILSMot3()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot3"
+                  value="2"
+                  onchange="validateILSMot3()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot3"
+                  value="3"
+                  onchange="validateILSMot3()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot3"
+                  value="4"
+                  onchange="validateILSMot3()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot3"
+                  value="5"
+                  onchange="validateILSMot3()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ils-mot3-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-mot4">
+            <p>
+              The teacher should encourage me to compare the various theories
+              that are dealt with in a course.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot4"
+                  value="1"
+                  onchange="validateILSMot4()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot4"
+                  value="2"
+                  onchange="validateILSMot4()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot4"
+                  value="3"
+                  onchange="validateILSMot4()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot4"
+                  value="4"
+                  onchange="validateILSMot4()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot4"
+                  value="5"
+                  onchange="validateILSMot4()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ils-mot4-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-mot5">
+            <p>
+              I have a need to work together with other students in my studies.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot5"
+                  value="1"
+                  onchange="validateILSMot5()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot5"
+                  value="2"
+                  onchange="validateILSMot5()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot5"
+                  value="3"
+                  onchange="validateILSMot5()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot5"
+                  value="4"
+                  onchange="validateILSMot5()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot5"
+                  value="5"
+                  onchange="validateILSMot5()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ils-mot5-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-mot6">
+            <p>
+              I do these studies out of sheer interest in the topics that are
+              dealt with.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot6"
+                  value="1"
+                  onchange="validateILSMot6()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot6"
+                  value="2"
+                  onchange="validateILSMot6()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot6"
+                  value="3"
+                  onchange="validateILSMot6()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot6"
+                  value="4"
+                  onchange="validateILSMot6()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot6"
+                  value="5"
+                  onchange="validateILSMot6()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ils-mot6-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-mot7">
+            <p>I study above all to pass the exam.</p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot7"
+                  value="1"
+                  onchange="validateILSMot7()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot7"
+                  value="2"
+                  onchange="validateILSMot7()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot7"
+                  value="3"
+                  onchange="validateILSMot7()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot7"
+                  value="4"
+                  onchange="validateILSMot7()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot7"
+                  value="5"
+                  onchange="validateILSMot7()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ils-mot7-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-mot8">
+            <p>
+              I want to test myself to see whether I am capable of doing studies
+              in higher education.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot8"
+                  value="1"
+                  onchange="validateILSMot8()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot8"
+                  value="2"
+                  onchange="validateILSMot8()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot8"
+                  value="3"
+                  onchange="validateILSMot8()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot8"
+                  value="4"
+                  onchange="validateILSMot8()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot8"
+                  value="5"
+                  onchange="validateILSMot8()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ils-mot8-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-mot9">
+            <p>
+              I have chosen this subject area, because it prepares me for the
+              type of work I am highly interested in.
+            </p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot9"
+                  value="1"
+                  onchange="validateILSMot9()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot9"
+                  value="2"
+                  onchange="validateILSMot9()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot9"
+                  value="3"
+                  onchange="validateILSMot9()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot9"
+                  value="4"
+                  onchange="validateILSMot9()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot9"
+                  value="5"
+                  onchange="validateILSMot9()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ils-mot9-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+
+          <div class="question" id="ils-mot10">
+            <p>I am afraid these studies are too demanding for me.</p>
+            <div class="likert-scale">
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot10"
+                  value="1"
+                  onchange="validateILSMot10()"
+                />
+                <span class="likert-label">I completely disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot10"
+                  value="2"
+                  onchange="validateILSMot10()"
+                />
+                <span class="likert-label">I somewhat disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot10"
+                  value="3"
+                  onchange="validateILSMot10()"
+                />
+                <span class="likert-label">I neither agree nor disagree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot10"
+                  value="4"
+                  onchange="validateILSMot10()"
+                />
+                <span class="likert-label">I somewhat agree</span>
+              </div>
+              <div class="likert-option">
+                <input
+                  type="radio"
+                  name="ils-mot10"
+                  value="5"
+                  onchange="validateILSMot10()"
+                />
+                <span class="likert-label">I completely agree</span>
+              </div>
+            </div>
+            <p id="ils-mot10-error" style="color: red; display: none">
+              Please select an option
+            </p>
+          </div>
+        </div>
+
+        <!-- Pedagogy Methods Section -->
+        <div class="questions" id="questions-pedagogy">
+          <h2>Pedagogy Methods</h2>
+          <div class="question" id="pedagogy-intro">
+            <p>
+              List of teaching methods from L. Nilson's,
+              <i>Teaching at its best</i>, 1998
+            </p>
+          </div>
+
+          <!-- Lecture -->
+          <div class="question" id="pedagogy-lecture">
+            <h3>Lecture</h3>
+            <p>
+              <em
+                >Instructor presenting material and answering student questions
+                that arise.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-lecture-like"
+                    value="1"
+                    onchange="validatePedagogyLectureLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-lecture-like"
+                    value="2"
+                    onchange="validatePedagogyLectureLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-lecture-like"
+                    value="3"
+                    onchange="validatePedagogyLectureLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-lecture-like"
+                    value="4"
+                    onchange="validatePedagogyLectureLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-lecture-like"
+                    value="5"
+                    onchange="validatePedagogyLectureLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-lecture-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-lecture-learn"
+                    value="1"
+                    onchange="validatePedagogyLectureLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-lecture-learn"
+                    value="2"
+                    onchange="validatePedagogyLectureLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-lecture-learn"
+                    value="3"
+                    onchange="validatePedagogyLectureLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-lecture-learn"
+                    value="4"
+                    onchange="validatePedagogyLectureLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-lecture-learn"
+                    value="5"
+                    onchange="validatePedagogyLectureLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-lecture-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Interactive Lecture -->
+          <div class="question" id="pedagogy-interactive-lecture">
+            <h3>Interactive Lecture</h3>
+            <p>
+              <em
+                >Lecture with two- to fifteen-minute breaks for student
+                activities (such as answering a multiple-choice objective item,
+                solving a problem, comparing and filling in lecture notes,
+                debriefing a minicase, doing a think pair-share exercise, or a
+                small-group discussion) every twelve to twenty minutes.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-interactive-lecture-like"
+                    value="1"
+                    onchange="validatePedagogyInteractiveLectureLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-interactive-lecture-like"
+                    value="2"
+                    onchange="validatePedagogyInteractiveLectureLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-interactive-lecture-like"
+                    value="3"
+                    onchange="validatePedagogyInteractiveLectureLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-interactive-lecture-like"
+                    value="4"
+                    onchange="validatePedagogyInteractiveLectureLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-interactive-lecture-like"
+                    value="5"
+                    onchange="validatePedagogyInteractiveLectureLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-interactive-lecture-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-interactive-lecture-learn"
+                    value="1"
+                    onchange="validatePedagogyInteractiveLectureLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-interactive-lecture-learn"
+                    value="2"
+                    onchange="validatePedagogyInteractiveLectureLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-interactive-lecture-learn"
+                    value="3"
+                    onchange="validatePedagogyInteractiveLectureLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-interactive-lecture-learn"
+                    value="4"
+                    onchange="validatePedagogyInteractiveLectureLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-interactive-lecture-learn"
+                    value="5"
+                    onchange="validatePedagogyInteractiveLectureLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-interactive-lecture-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Directed Discussion -->
+          <div class="question" id="pedagogy-directed-discussion">
+            <h3>Directed Discussion</h3>
+            <p>
+              <em
+                >Class discussion that follows a more or less orderly set of
+                questions that the instructor has crafted to lead students to
+                certain realizations or conclusions or to help them meet a
+                specific learning outcome.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-directed-discussion-like"
+                    value="1"
+                    onchange="validatePedagogyDirectedDiscussionLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-directed-discussion-like"
+                    value="2"
+                    onchange="validatePedagogyDirectedDiscussionLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-directed-discussion-like"
+                    value="3"
+                    onchange="validatePedagogyDirectedDiscussionLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-directed-discussion-like"
+                    value="4"
+                    onchange="validatePedagogyDirectedDiscussionLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-directed-discussion-like"
+                    value="5"
+                    onchange="validatePedagogyDirectedDiscussionLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-directed-discussion-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-directed-discussion-learn"
+                    value="1"
+                    onchange="validatePedagogyDirectedDiscussionLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-directed-discussion-learn"
+                    value="2"
+                    onchange="validatePedagogyDirectedDiscussionLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-directed-discussion-learn"
+                    value="3"
+                    onchange="validatePedagogyDirectedDiscussionLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-directed-discussion-learn"
+                    value="4"
+                    onchange="validatePedagogyDirectedDiscussionLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-directed-discussion-learn"
+                    value="5"
+                    onchange="validatePedagogyDirectedDiscussionLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-directed-discussion-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Classroom Assessment -->
+          <div class="question" id="pedagogy-classroom-assessment">
+            <h3>Classroom Assessment</h3>
+            <p>
+              <em
+                >Informal assignments and activities, usually in-class and
+                ungraded, to inform the instructor how well students are
+                mastering new material just presented or read. Students may
+                answer knowledge and comprehension questions.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-classroom-assessment-like"
+                    value="1"
+                    onchange="validatePedagogyClassroomAssessmentLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-classroom-assessment-like"
+                    value="2"
+                    onchange="validatePedagogyClassroomAssessmentLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-classroom-assessment-like"
+                    value="3"
+                    onchange="validatePedagogyClassroomAssessmentLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-classroom-assessment-like"
+                    value="4"
+                    onchange="validatePedagogyClassroomAssessmentLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-classroom-assessment-like"
+                    value="5"
+                    onchange="validatePedagogyClassroomAssessmentLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-classroom-assessment-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-classroom-assessment-learn"
+                    value="1"
+                    onchange="validatePedagogyClassroomAssessmentLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-classroom-assessment-learn"
+                    value="2"
+                    onchange="validatePedagogyClassroomAssessmentLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-classroom-assessment-learn"
+                    value="3"
+                    onchange="validatePedagogyClassroomAssessmentLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-classroom-assessment-learn"
+                    value="4"
+                    onchange="validatePedagogyClassroomAssessmentLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-classroom-assessment-learn"
+                    value="5"
+                    onchange="validatePedagogyClassroomAssessmentLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-classroom-assessment-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Group work/learning -->
+          <div class="question" id="pedagogy-group-work">
+            <h3>Group work/learning</h3>
+            <p>
+              <em
+                >Students doing a learning activity or creating a product in
+                small groups of two to six in or out of class.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-group-work-like"
+                    value="1"
+                    onchange="validatePedagogyGroupWorkLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-group-work-like"
+                    value="2"
+                    onchange="validatePedagogyGroupWorkLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-group-work-like"
+                    value="3"
+                    onchange="validatePedagogyGroupWorkLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-group-work-like"
+                    value="4"
+                    onchange="validatePedagogyGroupWorkLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-group-work-like"
+                    value="5"
+                    onchange="validatePedagogyGroupWorkLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-group-work-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-group-work-learn"
+                    value="1"
+                    onchange="validatePedagogyGroupWorkLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-group-work-learn"
+                    value="2"
+                    onchange="validatePedagogyGroupWorkLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-group-work-learn"
+                    value="3"
+                    onchange="validatePedagogyGroupWorkLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-group-work-learn"
+                    value="4"
+                    onchange="validatePedagogyGroupWorkLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-group-work-learn"
+                    value="5"
+                    onchange="validatePedagogyGroupWorkLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-group-work-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Student-peer feedback -->
+          <div class="question" id="pedagogy-student-peer-feedback">
+            <h3>Student-peer feedback</h3>
+            <p>
+              <em
+                >Students giving one another feedback on a written or an orally
+                presented product. The product may be a written draft or
+                practice speech.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-student-peer-feedback-like"
+                    value="1"
+                    onchange="validatePedagogyStudentPeerFeedbackLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-student-peer-feedback-like"
+                    value="2"
+                    onchange="validatePedagogyStudentPeerFeedbackLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-student-peer-feedback-like"
+                    value="3"
+                    onchange="validatePedagogyStudentPeerFeedbackLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-student-peer-feedback-like"
+                    value="4"
+                    onchange="validatePedagogyStudentPeerFeedbackLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-student-peer-feedback-like"
+                    value="5"
+                    onchange="validatePedagogyStudentPeerFeedbackLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-student-peer-feedback-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-student-peer-feedback-learn"
+                    value="1"
+                    onchange="validatePedagogyStudentPeerFeedbackLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-student-peer-feedback-learn"
+                    value="2"
+                    onchange="validatePedagogyStudentPeerFeedbackLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-student-peer-feedback-learn"
+                    value="3"
+                    onchange="validatePedagogyStudentPeerFeedbackLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-student-peer-feedback-learn"
+                    value="4"
+                    onchange="validatePedagogyStudentPeerFeedbackLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-student-peer-feedback-learn"
+                    value="5"
+                    onchange="validatePedagogyStudentPeerFeedbackLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-student-peer-feedback-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Cookbook science labs -->
+          <div class="question" id="pedagogy-cookbook-labs">
+            <h3>Cookbook science labs</h3>
+            <p>
+              <em
+                >Students (as individuals, in pairs or triads) conducting a
+                traditional, often predictable experiment following prescribed,
+                cookbook-like procedures.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-cookbook-labs-like"
+                    value="1"
+                    onchange="validatePedagogyCookbookLabsLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-cookbook-labs-like"
+                    value="2"
+                    onchange="validatePedagogyCookbookLabsLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-cookbook-labs-like"
+                    value="3"
+                    onchange="validatePedagogyCookbookLabsLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-cookbook-labs-like"
+                    value="4"
+                    onchange="validatePedagogyCookbookLabsLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-cookbook-labs-like"
+                    value="5"
+                    onchange="validatePedagogyCookbookLabsLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-cookbook-labs-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-cookbook-labs-learn"
+                    value="1"
+                    onchange="validatePedagogyCookbookLabsLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-cookbook-labs-learn"
+                    value="2"
+                    onchange="validatePedagogyCookbookLabsLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-cookbook-labs-learn"
+                    value="3"
+                    onchange="validatePedagogyCookbookLabsLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-cookbook-labs-learn"
+                    value="4"
+                    onchange="validatePedagogyCookbookLabsLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-cookbook-labs-learn"
+                    value="5"
+                    onchange="validatePedagogyCookbookLabsLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-cookbook-labs-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Just-in-time teaching -->
+          <div class="question" id="pedagogy-just-in-time">
+            <h3>Just-in-time teaching</h3>
+            <p>
+              <em
+                >Instructor adjusts class activities and lectures to respond to
+                the misconceptions revealed by students' responses to conceptual
+                questions. It can be an extension daily quizzes to motivate
+                students to do the readings.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-just-in-time-like"
+                    value="1"
+                    onchange="validatePedagogyJustInTimeLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-just-in-time-like"
+                    value="2"
+                    onchange="validatePedagogyJustInTimeLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-just-in-time-like"
+                    value="3"
+                    onchange="validatePedagogyJustInTimeLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-just-in-time-like"
+                    value="4"
+                    onchange="validatePedagogyJustInTimeLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-just-in-time-like"
+                    value="5"
+                    onchange="validatePedagogyJustInTimeLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-just-in-time-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-just-in-time-learn"
+                    value="1"
+                    onchange="validatePedagogyJustInTimeLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-just-in-time-learn"
+                    value="2"
+                    onchange="validatePedagogyJustInTimeLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-just-in-time-learn"
+                    value="3"
+                    onchange="validatePedagogyJustInTimeLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-just-in-time-learn"
+                    value="4"
+                    onchange="validatePedagogyJustInTimeLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-just-in-time-learn"
+                    value="5"
+                    onchange="validatePedagogyJustInTimeLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-just-in-time-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Case method -->
+          <div class="question" id="pedagogy-case-method">
+            <h3>Case method</h3>
+            <p>
+              <em
+                >Students applying course knowledge to devise one or more
+                solutions or resolutions to problems or dilemmas presented in a
+                realistic story or situation. It can be an individual,
+                small-group, or whole class activity.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-case-method-like"
+                    value="1"
+                    onchange="validatePedagogyCaseMethodLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-case-method-like"
+                    value="2"
+                    onchange="validatePedagogyCaseMethodLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-case-method-like"
+                    value="3"
+                    onchange="validatePedagogyCaseMethodLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-case-method-like"
+                    value="4"
+                    onchange="validatePedagogyCaseMethodLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-case-method-like"
+                    value="5"
+                    onchange="validatePedagogyCaseMethodLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-case-method-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-case-method-learn"
+                    value="1"
+                    onchange="validatePedagogyCaseMethodLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-case-method-learn"
+                    value="2"
+                    onchange="validatePedagogyCaseMethodLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-case-method-learn"
+                    value="3"
+                    onchange="validatePedagogyCaseMethodLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-case-method-learn"
+                    value="4"
+                    onchange="validatePedagogyCaseMethodLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-case-method-learn"
+                    value="5"
+                    onchange="validatePedagogyCaseMethodLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-case-method-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Inquiry-based learning -->
+          <div class="question" id="pedagogy-inquiry-based">
+            <h3>Inquiry-based or inquiry-guided learning</h3>
+            <p>
+              <em
+                >Students learning or applying material in order to meet a
+                challenge, such as to answer a question, conduct an experiment,
+                or interpret data.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-inquiry-based-like"
+                    value="1"
+                    onchange="validatePedagogyInquiryBasedLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-inquiry-based-like"
+                    value="2"
+                    onchange="validatePedagogyInquiryBasedLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-inquiry-based-like"
+                    value="3"
+                    onchange="validatePedagogyInquiryBasedLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-inquiry-based-like"
+                    value="4"
+                    onchange="validatePedagogyInquiryBasedLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-inquiry-based-like"
+                    value="5"
+                    onchange="validatePedagogyInquiryBasedLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-inquiry-based-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-inquiry-based-learn"
+                    value="1"
+                    onchange="validatePedagogyInquiryBasedLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-inquiry-based-learn"
+                    value="2"
+                    onchange="validatePedagogyInquiryBasedLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-inquiry-based-learn"
+                    value="3"
+                    onchange="validatePedagogyInquiryBasedLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-inquiry-based-learn"
+                    value="4"
+                    onchange="validatePedagogyInquiryBasedLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-inquiry-based-learn"
+                    value="5"
+                    onchange="validatePedagogyInquiryBasedLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-inquiry-based-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Problem-based learning -->
+          <div class="question" id="pedagogy-problem-based">
+            <h3>Problem-based learning</h3>
+            <p>
+              <em
+                >Student groups conducting outside research on
+                student-identified learning issues (unknowns) to devise one or
+                more solutions or resolutions to fuzzy problems or dilemmas
+                presented in a realistic story or situation.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-problem-based-like"
+                    value="1"
+                    onchange="validatePedagogyProblemBasedLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-problem-based-like"
+                    value="2"
+                    onchange="validatePedagogyProblemBasedLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-problem-based-like"
+                    value="3"
+                    onchange="validatePedagogyProblemBasedLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-problem-based-like"
+                    value="4"
+                    onchange="validatePedagogyProblemBasedLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-problem-based-like"
+                    value="5"
+                    onchange="validatePedagogyProblemBasedLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-problem-based-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-problem-based-learn"
+                    value="1"
+                    onchange="validatePedagogyProblemBasedLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-problem-based-learn"
+                    value="2"
+                    onchange="validatePedagogyProblemBasedLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-problem-based-learn"
+                    value="3"
+                    onchange="validatePedagogyProblemBasedLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-problem-based-learn"
+                    value="4"
+                    onchange="validatePedagogyProblemBasedLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-problem-based-learn"
+                    value="5"
+                    onchange="validatePedagogyProblemBasedLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-problem-based-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Project-based learning -->
+          <div class="question" id="pedagogy-project-based">
+            <h3>Project-based learning</h3>
+            <p>
+              <em
+                >Students (as individuals or in groups) applying course
+                knowledge to produce something, such as a report (written or
+                oral), process or product design, research or program proposal,
+                or computer code.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-project-based-like"
+                    value="1"
+                    onchange="validatePedagogyProjectBasedLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-project-based-like"
+                    value="2"
+                    onchange="validatePedagogyProjectBasedLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-project-based-like"
+                    value="3"
+                    onchange="validatePedagogyProjectBasedLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-project-based-like"
+                    value="4"
+                    onchange="validatePedagogyProjectBasedLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-project-based-like"
+                    value="5"
+                    onchange="validatePedagogyProjectBasedLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-project-based-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-project-based-learn"
+                    value="1"
+                    onchange="validatePedagogyProjectBasedLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-project-based-learn"
+                    value="2"
+                    onchange="validatePedagogyProjectBasedLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-project-based-learn"
+                    value="3"
+                    onchange="validatePedagogyProjectBasedLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-project-based-learn"
+                    value="4"
+                    onchange="validatePedagogyProjectBasedLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-project-based-learn"
+                    value="5"
+                    onchange="validatePedagogyProjectBasedLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-project-based-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Role plays / Simulations -->
+          <div class="question" id="pedagogy-role-plays">
+            <h3>Role plays / Simulations</h3>
+            <p>
+              <em
+                >Students acting out instructor-assigned roles (face-to-face or
+                on computer), a hypothetical social situation that abstracts key
+                elements from reality. improvising the script, in a realistic
+                and problematic social or interpersonal.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-role-plays-like"
+                    value="1"
+                    onchange="validatePedagogyRolePlaysLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-role-plays-like"
+                    value="2"
+                    onchange="validatePedagogyRolePlaysLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-role-plays-like"
+                    value="3"
+                    onchange="validatePedagogyRolePlaysLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-role-plays-like"
+                    value="4"
+                    onchange="validatePedagogyRolePlaysLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-role-plays-like"
+                    value="5"
+                    onchange="validatePedagogyRolePlaysLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-role-plays-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-role-plays-learn"
+                    value="1"
+                    onchange="validatePedagogyRolePlaysLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-role-plays-learn"
+                    value="2"
+                    onchange="validatePedagogyRolePlaysLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-role-plays-learn"
+                    value="3"
+                    onchange="validatePedagogyRolePlaysLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-role-plays-learn"
+                    value="4"
+                    onchange="validatePedagogyRolePlaysLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-role-plays-learn"
+                    value="5"
+                    onchange="validatePedagogyRolePlaysLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-role-plays-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Fieldwork and clinicals -->
+          <div class="question" id="pedagogy-fieldwork">
+            <h3>Fieldwork and clinicals</h3>
+            <p>
+              <em
+                >Students learning how to conduct research and make sound
+                professional judgments in real-world situations.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-fieldwork-like"
+                    value="1"
+                    onchange="validatePedagogyFieldworkLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-fieldwork-like"
+                    value="2"
+                    onchange="validatePedagogyFieldworkLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-fieldwork-like"
+                    value="3"
+                    onchange="validatePedagogyFieldworkLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-fieldwork-like"
+                    value="4"
+                    onchange="validatePedagogyFieldworkLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-fieldwork-like"
+                    value="5"
+                    onchange="validatePedagogyFieldworkLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-fieldwork-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this method</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-fieldwork-learn"
+                    value="1"
+                    onchange="validatePedagogyFieldworkLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-fieldwork-learn"
+                    value="2"
+                    onchange="validatePedagogyFieldworkLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-fieldwork-learn"
+                    value="3"
+                    onchange="validatePedagogyFieldworkLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-fieldwork-learn"
+                    value="4"
+                    onchange="validatePedagogyFieldworkLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="pedagogy-fieldwork-learn"
+                    value="5"
+                    onchange="validatePedagogyFieldworkLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="pedagogy-fieldwork-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teaching Styles Section -->
+        <div class="questions" id="questions-teaching-styles">
+          <h2>Teaching Styles</h2>
+          <div class="question" id="teaching-styles-intro">
+            <p>
+              List of teaching styles developed by A. Grasha in
+              <i
+                >Teaching with style: a practical guide to enhancing learning by
+                understanding teaching and learning styles</i
+              >, 2002
+            </p>
+          </div>
+
+          <!-- Expert -->
+          <div class="question" id="teaching-style-expert">
+            <h3>Expert</h3>
+            <p>
+              <em
+                >Possesses knowledge and expertise that students need. Strives
+                to maintain status as an expert among students by displaying
+                detailed knowledge and by challenging students to enhance their
+                competence. Concerned with transmitting information and ensuring
+                that students are well prepared.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching style</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-expert-like"
+                    value="1"
+                    onchange="validateTeachingStyleExpertLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-expert-like"
+                    value="2"
+                    onchange="validateTeachingStyleExpertLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-expert-like"
+                    value="3"
+                    onchange="validateTeachingStyleExpertLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-expert-like"
+                    value="4"
+                    onchange="validateTeachingStyleExpertLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-expert-like"
+                    value="5"
+                    onchange="validateTeachingStyleExpertLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="teaching-style-expert-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this style</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-expert-learn"
+                    value="1"
+                    onchange="validateTeachingStyleExpertLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-expert-learn"
+                    value="2"
+                    onchange="validateTeachingStyleExpertLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-expert-learn"
+                    value="3"
+                    onchange="validateTeachingStyleExpertLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-expert-learn"
+                    value="4"
+                    onchange="validateTeachingStyleExpertLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-expert-learn"
+                    value="5"
+                    onchange="validateTeachingStyleExpertLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="teaching-style-expert-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Formal Authority -->
+          <div class="question" id="teaching-style-formal-authority">
+            <h3>Formal Authority</h3>
+            <p>
+              <em
+                >Possesses status among students because of knowledge and role
+                as a faculty member. Concerned with providing positive and
+                negative feedback, establishing learning goals, expectations,
+                and rules of conduct for students. Concerned with the correct,
+                acceptable, and standard ways to do things and with providing
+                students with the structure they need to learn.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching style</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-formal-authority-like"
+                    value="1"
+                    onchange="validateTeachingStyleFormalAuthorityLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-formal-authority-like"
+                    value="2"
+                    onchange="validateTeachingStyleFormalAuthorityLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-formal-authority-like"
+                    value="3"
+                    onchange="validateTeachingStyleFormalAuthorityLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-formal-authority-like"
+                    value="4"
+                    onchange="validateTeachingStyleFormalAuthorityLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-formal-authority-like"
+                    value="5"
+                    onchange="validateTeachingStyleFormalAuthorityLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="teaching-style-formal-authority-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this style</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-formal-authority-learn"
+                    value="1"
+                    onchange="validateTeachingStyleFormalAuthorityLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-formal-authority-learn"
+                    value="2"
+                    onchange="validateTeachingStyleFormalAuthorityLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-formal-authority-learn"
+                    value="3"
+                    onchange="validateTeachingStyleFormalAuthorityLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-formal-authority-learn"
+                    value="4"
+                    onchange="validateTeachingStyleFormalAuthorityLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-formal-authority-learn"
+                    value="5"
+                    onchange="validateTeachingStyleFormalAuthorityLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="teaching-style-formal-authority-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Personal Model -->
+          <div class="question" id="teaching-style-personal-model">
+            <h3>Personal Model</h3>
+            <p>
+              <em
+                >Believes in "teaching by personal example" and establishes a
+                prototype for how to think and behave. Oversees, guides, and
+                directs by showing how to do things, and encouraging students to
+                observe and then to emulate the instructor's approach.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching style</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-personal-model-like"
+                    value="1"
+                    onchange="validateTeachingStylePersonalModelLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-personal-model-like"
+                    value="2"
+                    onchange="validateTeachingStylePersonalModelLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-personal-model-like"
+                    value="3"
+                    onchange="validateTeachingStylePersonalModelLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-personal-model-like"
+                    value="4"
+                    onchange="validateTeachingStylePersonalModelLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-personal-model-like"
+                    value="5"
+                    onchange="validateTeachingStylePersonalModelLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="teaching-style-personal-model-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this style</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-personal-model-learn"
+                    value="1"
+                    onchange="validateTeachingStylePersonalModelLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-personal-model-learn"
+                    value="2"
+                    onchange="validateTeachingStylePersonalModelLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-personal-model-learn"
+                    value="3"
+                    onchange="validateTeachingStylePersonalModelLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-personal-model-learn"
+                    value="4"
+                    onchange="validateTeachingStylePersonalModelLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-personal-model-learn"
+                    value="5"
+                    onchange="validateTeachingStylePersonalModelLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="teaching-style-personal-model-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Facilitator -->
+          <div class="question" id="teaching-style-facilitator">
+            <h3>Facilitator</h3>
+            <p>
+              <em
+                >Emphasizes the personal nature of teacher-student interactions.
+                Guides and directs students by asking questions, exploring
+                options, suggesting alternatives, and encouraging them to
+                develop criteria to make informed choices. Overall goal is to
+                develop in students the capacity for independent action,
+                initiative, and responsibility. Works with students on projects
+                in a consultative fashion and tries to provide as much support
+                and encouragement as possible.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching style</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-facilitator-like"
+                    value="1"
+                    onchange="validateTeachingStyleFacilitatorLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-facilitator-like"
+                    value="2"
+                    onchange="validateTeachingStyleFacilitatorLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-facilitator-like"
+                    value="3"
+                    onchange="validateTeachingStyleFacilitatorLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-facilitator-like"
+                    value="4"
+                    onchange="validateTeachingStyleFacilitatorLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-facilitator-like"
+                    value="5"
+                    onchange="validateTeachingStyleFacilitatorLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="teaching-style-facilitator-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this style</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-facilitator-learn"
+                    value="1"
+                    onchange="validateTeachingStyleFacilitatorLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-facilitator-learn"
+                    value="2"
+                    onchange="validateTeachingStyleFacilitatorLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-facilitator-learn"
+                    value="3"
+                    onchange="validateTeachingStyleFacilitatorLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-facilitator-learn"
+                    value="4"
+                    onchange="validateTeachingStyleFacilitatorLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-facilitator-learn"
+                    value="5"
+                    onchange="validateTeachingStyleFacilitatorLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="teaching-style-facilitator-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+
+          <!-- Delegator -->
+          <div class="question" id="teaching-style-delegator">
+            <h3>Delegator</h3>
+            <p>
+              <em
+                >Concerned with developing students' capacity to function in an
+                autonomous fashion. Students work independently on projects or
+                as part of autonomous teams. The teacher is available at the
+                request of students as a resource person.</em
+              >
+            </p>
+            <br />
+            <div class="question">
+              <p>I like this teaching style</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-delegator-like"
+                    value="1"
+                    onchange="validateTeachingStyleDelegatorLike()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-delegator-like"
+                    value="2"
+                    onchange="validateTeachingStyleDelegatorLike()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-delegator-like"
+                    value="3"
+                    onchange="validateTeachingStyleDelegatorLike()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-delegator-like"
+                    value="4"
+                    onchange="validateTeachingStyleDelegatorLike()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-delegator-like"
+                    value="5"
+                    onchange="validateTeachingStyleDelegatorLike()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="teaching-style-delegator-like-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+
+            <div class="question">
+              <p>I believe I efficiently learn with this style</p>
+              <div class="likert-scale">
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-delegator-learn"
+                    value="1"
+                    onchange="validateTeachingStyleDelegatorLearn()"
+                  />
+                  <span class="likert-label">I completely disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-delegator-learn"
+                    value="2"
+                    onchange="validateTeachingStyleDelegatorLearn()"
+                  />
+                  <span class="likert-label">I somewhat disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-delegator-learn"
+                    value="3"
+                    onchange="validateTeachingStyleDelegatorLearn()"
+                  />
+                  <span class="likert-label">I neither agree nor disagree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-delegator-learn"
+                    value="4"
+                    onchange="validateTeachingStyleDelegatorLearn()"
+                  />
+                  <span class="likert-label">I somewhat agree</span>
+                </div>
+                <div class="likert-option">
+                  <input
+                    type="radio"
+                    name="teaching-style-delegator-learn"
+                    value="5"
+                    onchange="validateTeachingStyleDelegatorLearn()"
+                  />
+                  <span class="likert-label">I completely agree</span>
+                </div>
+              </div>
+              <p
+                id="teaching-style-delegator-learn-error"
+                style="color: red; display: none"
+              >
+                Please select an option
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Your Input Section -->
+        <div class="questions" id="questions-your-input">
+          <h2>Your Input</h2>
+
+          <!-- Study tips sharing -->
+          <div class="question" id="study-tips">
+            <h3>
+              Please write down your favorite study methods or tips you would
+              like to share with other students with a similar profile.
+            </h3>
+            <p><em>Optional - maximum 600 characters</em></p>
+            <div class="options">
+              <label class="option">
+                <textarea
+                  name="study-tips"
+                  placeholder="Share your study tips and methods here..."
+                  maxlength="600"
+                  rows="4"
+                  style="
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid var(--primary-light);
+                    border-radius: 6px;
+                    font-family: inherit;
+                    font-size: 1.1rem;
+                    resize: vertical;
+                  "
+                  oninput="validateStudyTips()"
+                ></textarea>
+              </label>
+            </div>
+            <p
+              id="study-tips-char-count"
+              style="
+                color: var(--text-light);
+                font-size: 0.9rem;
+                text-align: right;
+                margin-top: 5px;
+              "
+            >
+              0/600 characters
+            </p>
+            <p id="study-tips-error" style="color: red; display: none">
+              Please limit your study tips to 600 characters
+            </p>
+          </div>
+
+          <!-- Remarks for administrator -->
+          <div class="question" id="remarks-admin">
+            <h3>Do you have any remark for the questionnaire administrator?</h3>
+            <p><em>Optional - maximum 600 characters</em></p>
+            <div class="options">
+              <label class="option">
+                <textarea
+                  name="remarks-admin"
+                  placeholder="Enter your remarks here..."
+                  maxlength="600"
+                  rows="4"
+                  style="
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid var(--primary-light);
+                    border-radius: 6px;
+                    font-family: inherit;
+                    font-size: 1.1rem;
+                    resize: vertical;
+                  "
+                  oninput="validateRemarksAdmin()"
+                ></textarea>
+              </label>
+            </div>
+            <p
+              id="remarks-admin-char-count"
+              style="
+                color: var(--text-light);
+                font-size: 0.9rem;
+                text-align: right;
+                margin-top: 5px;
+              "
+            >
+              0/600 characters
+            </p>
+            <p id="remarks-admin-error" style="color: red; display: none">
+              Please limit your remarks to 600 characters
+            </p>
+          </div>
+        </div>
+
+        <div class="test-navigation">
+          <button type="submit" class="nav-button">Submit Answers</button>
+        </div>
+      </div>
+    </form>
+  </body>
+</html>

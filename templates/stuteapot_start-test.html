@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StuTeaPot/Start-Test</title>
+    <script src="{{ url_for('static', filename='node_modules/d3/dist/d3.js') }}"></script>
+    <script
+      type="module"
+      src="{{ url_for('static', filename='js/stuteapot_start_test_interact.js') }}"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/stuteapot_style.css') }}"
+    />
+    <script>
+      // Set image paths for JavaScript to use
+      window.staticImages = {
+        teapot:
+          "{{ url_for('static', filename='images/teapot_straight_t.png') }}",
+        teacup:
+          "{{ url_for('static', filename='images/filled_teacup_t.png') }}",
+      };
+    </script>
+  </head>
+
+  <body>
+    <div id="dropdown-container">
+      <div id="dropdown-trigger">
+        <img
+          id="teapot-icon"
+          src="{{ url_for('static', filename='images/teapot_straight_t.png') }}"
+          alt="Menu"
+        />
+        <span id="menu-label">MENU</span>
+      </div>
+      <div id="dropdown-menu" class="hidden">
+        <div class="menu-item">
+          <img
+            class="teacup-icon"
+            src="{{ url_for('static', filename='images/filled_teacup_t.png') }}"
+            alt="Home"
+          />
+          <span><a href="{{ url_for('home') }}">Home</a></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pre-test-area">
+      <h2>Please read the following information.</h2> 
+      <h2>They concern the use of your data and the goals of the present questionnaire.<h2>
+    </div>
+
+    <div class="test-questions">
+      <div class="questions">
+        <h3>Discover Your Learning Styles</h3>
+        <p>Dive into our questionnaire designed to assess your learning styles. 
+          By navigating through these questions, you can also contribute to a 
+          small research project in the fields of pedagogy and psychology!</p>
+        <br>
+        <h3>Contribute to Pedagogy and Psychology Research</h3>
+        <p>This is not just a survey of your learning profile, but also an opportunity to 
+          take part in a research project. By participating, 
+          you are helping to better understand the diversity of student's preferences 
+          in pedagogy strategies. Your anonymous responses will be invaluable in better 
+          understanding the wide variety of student profiles. 
+          Remember, your privacy is our priority, and your data will only be used for 
+          research purposes and for improving the StuTeaPot website.</p>
+        <br>
+        <h3>Risk and Data Usage</h3>
+        <p>There's absolutely no risk involved in taking part in this study. 
+          Your only task will be to answer a series of questions, 
+          which generally takes between 20 and 30 minutes. 
+          Feel free to pause or leave the questionnaire whenever you like. 
+          If you leave the questionnaire before the end, you will not receive the test results. 
+          In addition, if you wish to withdraw from the study, 
+          even after it has been completed, simply send me an email 
+          (email address can be found in the "Find me" section).
+        </p>
+        <br>
+        <h3>Why Your Input is Crucial</h3>
+        <p>Every student is unique, and this uniqueness is reflected in the myriad ways 
+          in which learning is processed and teaching strategies are received.
+          The more responses we collect, the more we understand how learning styles 
+          and teaching method preferences intersect with personality traits. 
+          Your participation is also essential to help other students receive 
+          personalized feedback. At the end of the questionnaire, you will be able
+          to describe your favorite study methods and share tips, and those will be shared with other students with profiles similar to yours.
+        </p>
+        <br>
+        <h3>Consent</h3>
+        <p>By ticking YES below, you certify that you have read this form and agree to 
+          participate in accordance with the above conditions. If you choose not to 
+          participate by selecting NO, you can still access your student profile 
+          without any data being collected.</p>
+        <br>
+        <p>Do you give your consent for this website to collect your answers?</p>
+          <ul>
+            <li><a href="{{ url_for('take_test_en') }}" class="test-button"> YES </a></li>
+            <li><a href="{{ url_for('take_test_en') }}" class="test-button"> NO, but I still want to take the test. </a></li>
+          </ul>
+        <br>
+        <br>
+        <h5>This text is largely inspired by the section "Consent and Data collection" 
+          from <a href="https://www.the-deepmodel.fr">the Deep Model website</a> 
+          which assesses your gaming preferences.</h5>
+      </div>
+    </div>
+
+
+    <footer>
+      <p>Lucile Lapray</p>
+      <p>Student at PSL university & Louis-le-Grand.</p>
+      <p>CPES 3 - Data, arts and culture</p>
+      <br />
+      <p class="find-me">Find me:</p>
+      <ul>
+        <li>
+          <a href="#" class="email-link" data-email="lucile.lapray@psl.eu"
+            >lucile.lapray[at]psl.eu</a>
+        </li>
+        <li>
+          <a class="cool-link" href="https://www.kaggle.com/lucilelpy"
+            >Kaggle</a
+          >
+        </li>
+        <li>
+          <a
+            class="cool-link"
+            href="https://www.linkedin.com/in/lucile-lapray-157b14330"
+            >LinkedIn</a
+          >
+        </li>
+        <li>
+          <a
+            class="cool-link"
+            href="https://api.unibuddy.co/og/psl/buddies/students/667530f2ee08bb06c797b597?buddyPosition=share"
+            >Unibuddy</a
+          >
+        </li>
+      </ul>
+      <br />
+    </footer>
+  </body>
+</html>
