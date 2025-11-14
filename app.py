@@ -32,6 +32,10 @@ def inject_static_images():
 # Website routes
 @app.route('/')
 def home():
+    return render_template('index.html')
+
+@app.route('/home')
+def home():
     return render_template('stuteapot_home.html')
 
 @app.route('/start_test')

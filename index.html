@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StuTeaPot</title>
+    <script src="{{ url_for('static', filename='node_modules/d3/dist/d3.js') }}"></script>
+    <script
+      type="module"
+      src="{{ url_for('static', filename='js/stuteapot_interact.js') }}"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/stuteapot_style.css') }}"
+    />
+    <script>
+      // Set image paths for JavaScript to use
+      window.staticImages = {
+        teapot:
+          "{{ url_for('static', filename='images/teapot_straight_t.png') }}",
+        teacup:
+          "{{ url_for('static', filename='images/filled_teacup_t.png') }}",
+      };
+    </script>
+  </head>
+
+  <body>
+    <section id="landing">
+      <div class="landing-content">
+        <h1 class="main-title">STUTEAPOT</h1>
+        <p class="subtitle">
+          Discover your learning style through personalized assessment
+        </p>
+      </div>
+      <div class="test-button-container">
+        <a href="{{ url_for('home') }}" class="test-button"> HOME PAGE </a>
+      </div>
+    </section>
+  </body>
+</html>
